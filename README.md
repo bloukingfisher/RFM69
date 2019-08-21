@@ -1,5 +1,5 @@
 ##Forked library for Particle Photon use
-- Is confirmed to work with Particle Photon, but Gen 3 devices may [experience issues](https://community.particle.io/t/how-to-make-rfm69-work-on-photon-solved-new-library-rfm69-particle/26497/73)
+- Is confirmed to work with Particle Photon. Some updates have been made to accommodate Gen 3 devices but it has not been fully confirmed if it works, see [issues](https://community.particle.io/t/how-to-make-rfm69-work-on-photon-solved-new-library-rfm69-particle/26497/73)
 - It can be used locally or in the Particle Web IDE (it is now included in the Community Libraries to add easily)
 - A custom working [example for Photon](https://github.com/bloukingfisher/RFM69-Particle/tree/master/firmware/examples) which uses serial and Particle Console Logs for easy verification that it works.
 - If you're using ATC or Registers make sure you include these statements in Particle IDE as "using library in app" does not add them automatically: #include "RFM69-Particle/RFM69_ATC.h"  #include "RFM69-Particle/RFM69registers.h"
