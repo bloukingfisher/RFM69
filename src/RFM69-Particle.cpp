@@ -119,7 +119,9 @@ bool RFM69::initialize(byte freqBand, byte nodeID, byte networkID)
   start_to = millis() ;
 	while (((readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00) && millis()-start_to < TIME_OUT); // Wait for ModeReady
   if (millis()-start_to >= TIME_OUT) return (false);
-  attachInterrupt(_interruptNum, RFM69::isr0, RISING);
+  // picking a non-interrupt enabled pin will prevent proper initialization
+  // code thanks to @ScruffR - https://community.particle.io/t/how-to-make-rfm69-work-on-photon-solved-new-library-rfm69-particle/26497/93?u=bloukingfisher
+  if (!attachInterrupt(_interruptNum, RFM69::isr0, RISING)) return false;
 
   selfPointer = this;
   _address = nodeID;
@@ -495,19 +497,14 @@ void RFM69::setIRQ(byte newIRQ) {
       _interruptNum = newIRQ==2?3:newIRQ-10;
     }
   #elif defined(PARTICLE)
-    // For Photon see: https://docs.particle.io/reference/device-os/firmware/photon/#attachinterrupt-
+    // For Photon interrupt pins see: https://docs.particle.io/reference/device-os/firmware/photon/#attachinterrupt-
     // D5, D6, D7, A2, WKP, TX, RX ,D1, A4, D2, A0, A3, D3, DAC, D4, A1
     // Pins that cannot be used (Photon/Electron/P1): D0, A5, D7, C1, C2
     //"All A and D pins (including TX, RX, and SPI) on Gen 3 (mesh) devices can be used for interrupts"
-    //Original that worked for Photon: if ( (newIRQ>=D0 && newIRQ<=D4 ) || (newIRQ>=A0 && newIRQ<=A6 && newIRQ!=A2) )
-    //Below may be over restrictive to use common interrupt pins between Particle family of devices
-  if ((newIRQ >= D1 && newIRQ <= D4) || (newIRQ >= A0 && newIRQ <= A4 && newIRQ != A2)) || (newIRQ == C1 || newIRQ == C2)
-    {
+
+    //Set the pins to what the user specified
       _interruptPin = newIRQ;
       _interruptNum = _interruptPin;
-    }
-  #else
-    #error Target not supported for external Interrupts
   #endif
 }
 
