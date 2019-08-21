@@ -28,8 +28,8 @@
 // Please maintain this license information along with authorship
 // and copyright notices in any redistribution of this code
 // **********************************************************************************
-#if defined(SPARK)
-#include "application.h"
+#if defined(PARTICLE)
+#include "Particle.h"
 #endif
 
 #ifndef RFM69_h
@@ -49,7 +49,7 @@
   #define RF69_IRQ_PIN          3
   #define RF69_IRQ_NUM          0
 // On spark core interrupt is defined only with pin
-#elif defined(SPARK)
+#elif defined(PARTICLE)
   #define RF69_IRQ_PIN          2
   #define RF69_IRQ_NUM          RF69_IRQ_PIN
 #endif

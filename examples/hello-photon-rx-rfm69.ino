@@ -1,6 +1,6 @@
-#include "RFM69-Particle/RFM69-Particle.h"
-#include "RFM69-Particle/RFM69_ATC.h"
-#include "RFM69-Particle/RFM69registers.h"
+#include "RFM69-Particle.h"
+#include "RFM69_ATC.h"
+#include "RFM69registers.h"
 
 // Adjustments to library to work with Particle Photon including in Web IDE by Jurie Pieterse
 // Forked library for Photon at https://github.com/bloukingfisher/RFM69/

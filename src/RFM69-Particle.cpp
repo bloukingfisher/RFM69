@@ -30,8 +30,8 @@
 // **********************************************************************************
 
 
-#if defined(SPARK)
-#include "application.h"
+#if defined(PARTICLE)
+#include "Particle.h"
 #endif
 #include "RFM69-Particle.h"
 #include "RFM69registers.h"
@@ -422,7 +422,7 @@ void RFM69::writeReg(byte addr, byte value)
 void RFM69::select() {
   noInterrupts();
   //save current SPI settings
-  #ifndef SPARK
+  #ifndef PARTICLE
   _SPCR = SPCR;
   _SPSR = SPSR;
   #endif
@@ -438,7 +438,7 @@ void RFM69::select() {
 void RFM69::unselect() {
   digitalWrite(_slaveSelectPin, HIGH);
   //restore SPI settings to what they were before talking to RFM69
-  #ifndef SPARK
+  #ifndef PARTICLE
   SPCR = _SPCR;
   SPSR = _SPSR;
   #endif
@@ -494,11 +494,14 @@ void RFM69::setIRQ(byte newIRQ) {
       _interruptPin = newIRQ;
       _interruptNum = newIRQ==2?3:newIRQ-10;
     }
-  #elif defined(SPARK)
-    // IRQ authorized on spark core are
-    // D0, D1, D2, D3, D4, A0, A1, A3, A4, A5, A6
-    // see http://docs.spark.io/firmware/#interrupts-attachinterrupt
-    if ( (newIRQ>=D0 && newIRQ<=D4 ) || (newIRQ>=A0 && newIRQ<=A6 && newIRQ!=A2) )
+  #elif defined(PARTICLE)
+    // For Photon see: https://docs.particle.io/reference/device-os/firmware/photon/#attachinterrupt-
+    // D5, D6, D7, A2, WKP, TX, RX ,D1, A4, D2, A0, A3, D3, DAC, D4, A1
+    // Pins that cannot be used (Photon/Electron/P1): D0, A5, D7, C1, C2
+    //"All A and D pins (including TX, RX, and SPI) on Gen 3 (mesh) devices can be used for interrupts"
+    //Original that worked for Photon: if ( (newIRQ>=D0 && newIRQ<=D4 ) || (newIRQ>=A0 && newIRQ<=A6 && newIRQ!=A2) )
+    //Below may be over restrictive to use common interrupt pins between Particle family of devices
+  if ((newIRQ >= D1 && newIRQ <= D4) || (newIRQ >= A0 && newIRQ <= A4 && newIRQ != A2)) || (newIRQ == C1 || newIRQ == C2)
     {
       _interruptPin = newIRQ;
       _interruptNum = _interruptPin;
