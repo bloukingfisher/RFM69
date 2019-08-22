@@ -1,6 +1,6 @@
-#include "RFM69-Particle.h"
-#include "RFM69_ATC.h"
-#include "RFM69registers.h"
+#include <RFM69-Particle.h>
+#include <RFM69_ATC.h>
+#include <RFM69registers.h>
 
 // Adjustments to library to work with Particle Photon including in Web IDE by Jurie Pieterse
 // Forked library for Photon at https://github.com/bloukingfisher/RFM69/
@@ -56,9 +56,9 @@ int16_t RECEIVER = 1;     //receiver's node ID
 //*********************************************************************************************
 
 #define RFM69_CS      A2 
-#define RFM69_IRQ     2
-#define RFM69_IRQN    2 //On Photon it is the same unlike Arduino
-#define RFM69_RST     6 
+#define RFM69_IRQ     D2
+#define RFM69_IRQN    D2 //On Photon it is the same unlike Arduino
+#define RFM69_RST     D6 
 
 int16_t packetnum = 0;  // packet counter, we increment per xmission
 
